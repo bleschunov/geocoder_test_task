@@ -14,5 +14,3 @@ async def read_users(point: PointUpload, db=Depends(get_conn)):
         return await geocoder_model.get_point_by_address(point, db)
     except NotFoundException:
         raise HTTPException(status_code=404, detail="Point is not found.")
-
-

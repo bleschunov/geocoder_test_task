@@ -2,6 +2,7 @@ from fastapi import FastAPI
 import uvicorn
 
 from dotenv import load_dotenv
+
 load_dotenv()
 
 from controller import geocoder_controller
