@@ -1,0 +1,10 @@
+data/*
+!data/.gitkeep
+!data/init.sql
+
+venv
+.env
+.env.test
+.idea
+.DS_Store
+__pycache__

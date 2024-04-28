@@ -1,0 +1,48 @@
+version: "3"
+
+services:
+  test_postgres:
+    image: postgres
+    container_name: "test_postgres"
+    env_file:
+      - .env.test
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 2s
+      timeout: 2s
+      retries: 10
+    ports:
+      - ${POSTGRES_PORT}:5432
+    volumes:
+      - ./data/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./data/test_pgdata:/var/lib/postgresql/data
+  postgres:
+    image: postgres
+    container_name: "postgres"
+    env_file:
+      - .env
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready"]
+      interval: 2s
+      timeout: 2s
+      retries: 10
+    ports:
+      - ${POSTGRES_PORT}:5432
+    volumes:
+      - ./data/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./data/pgdata:/var/lib/postgresql/data
+  service:
+    image: geocoder_test_task
+    container_name: geocoder_test_task
+    env_file:
+      - .env
+    build:
+        context: .
+        dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./data:/app/data
