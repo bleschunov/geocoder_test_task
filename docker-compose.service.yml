@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  service:
+    image: geocoder_test_task
+    container_name: geocoder_test_task
+    env_file:
+      - .env
+    build:
+        context: .
+        dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./data:/app/data
